@@ -20,7 +20,6 @@ CREATE TABLE role (
   salary DECIMAL NOT NULL,
   department_id INT NOT NULL,
   PRIMARY KEY (id)
-
 );
 
 -- Creates table named employee
