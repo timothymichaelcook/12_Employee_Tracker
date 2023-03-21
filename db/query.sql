@@ -1,6 +1,7 @@
 SELECT *
 FROM department
-JOIN role ON 
+JOIN employee ON department.employee = employee.id;
+
 
 
 
