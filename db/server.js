@@ -54,23 +54,151 @@ function init() {
         break;
       case 'View departments':
         viewDepartments();
-
+        break;
+      case 'View roles':
+        viewRoles();
+        break;
+      //add additional cases with functions
+      //
+      //
+      //
+      //
+      //
+      //
+      case 'Exit':
+        db.end();
+        break;
     }
-  })
-
+  });
 }
 
 // Function to add department
-function addDepartment()
+function addDepartment() {
+  inquirer.prompt({
+    name: 'addDepartment',
+    type: 'input',
+    message: 'Please choose a department: ',
+    validate: input => {
+      if (input.trim() != '') {
+        return true;
+      }
+      return '(Cannot be blank) Please choose a department: '
+    }
+  })
+  .then(function (userSelection) {
+    let query = db.query(
+      'INSET INTO department SET ?',
+      {
+        name: userSelection.addDepartment,
+      },
+      function (err, res) {
+        if (err) throw err;
+        console.log('Department: ' + userSelection.addDepartment + ' has been created ');
+        init();
+      }
+    );
+  });
+}
 
 // Function to add roles
-function addRole()
+function addRole() {
+  let query = 'SELECT * FROM department';
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    let totalDepartments = [];
+    for (let i = 0; i < result.length; i++) {
+      let individualDepartment = result[i].name;
+      totalDepartments.push(individualDepartment);
+    }
+
+    inquirer.prompt([
+      {
+        name: 'title',
+        type: 'input',
+        message: 'Please choose a role: ',
+        validate: input => {
+          if (input.trim() != '') {
+            return true;
+          }
+          return '(Cannot be blank) Please choose a role: '
+        }
+
+      },
+      {
+        name: 'salary',
+        type: 'input',
+        message: 'Please choose a salary: ',
+        validate: input => {
+          if (!isNaN(input)) {
+            return true;
+          }
+          return '(Cannot be blank or contain letters) Please choose a salary you would like to add: '
+        }
+      },
+      {
+        name: 'department_id',
+        type: 'list',
+        message: 'Please choose a role for the new department: ',
+        choices: [...totalDepartments]
+      }
+    ])
+    .then(function (userSelection) {
+      let department_id = '';
+      for (i = 0; i < userSelection.length; i++) {
+        if (userSelection.department_id === result[i].name) {
+          department_id = result[i].id;
+        }
+      }
+      let query = db.query('INSERT INTO role SET ?'
+        {
+          title: userSelection.title,
+          salary: userSelection.salary,
+          department_id: department_id,
+        },
+        function (err, res) {
+          if (err) throw err;
+          console.log(`${userSelection.title} in ${userSelection.department_id} department for $${userSelection} has been created.`);
+          init();
+        }
+      )
+    })
+  })
+}
 
 // Function to add employees
-function addEmployee()
+function addEmployee() {
+  // Declare query variable locally in addEmployee
+  // Set up db connection
+  // NPM Inquirer to get user inputs via prompts
+  // .then method
+  // call init function again
+}
 
 // Function to view departments
-function viewDepartments()
+function viewDepartments() {
+
+
+
+
+  /*
+function departments() {
+  let query = "SELECT * FROM department";
+  connection.query(query, function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    start();
+  })
+}
+*/
+
+
+
+
+}
+
+
+
+
 
 // Function to view roles
 function viewRoles()
