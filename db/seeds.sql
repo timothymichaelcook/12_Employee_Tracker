@@ -1,3 +1,4 @@
+-- Seeding employees_DB with data
 INSERT INTO department (name)
 VALUES ('Sales'),
        ('Engineer'),
