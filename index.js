@@ -176,35 +176,41 @@ function addEmployee() {
 
 // Function to view departments
 function viewDepartments() {
-
-
-
-
-  /*
-function departments() {
-  let query = "SELECT * FROM department";
-  connection.query(query, function (err, result) {
+  let query = 'SELECT * FROM department';
+  db.query(query, function (err, result) {
     if (err) throw err;
     console.table(result);
-    start();
+    init();
   })
 }
-*/
-
-
-
-
-}
-
-
-
-
 
 // Function to view roles
-function viewRoles()
+function viewRoles() {
+  let query = 'SELECT * FROM role';
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    init();
+  })
+}
 
 // Function to view employees
-function viewEmployees()
+function viewEmployees() {
+  let query = `
+  SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name
+  AS department, role.salary, CONCAT(manager.first_name,' ',manager.last_name)
+  AS manager
+  FROM employee
+  LEFT JOIN role r ON employee_id = role.id
+  LEFT JOIN department ON role.department_id = department.id
+  LEFT JOIN employee ON employee.manager_id = manager.id
+  `
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    init();
+  })
+}
 
 // Function to view employee's based on manager id
 function viewEmployeesByManager()
