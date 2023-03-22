@@ -1,0 +1,24 @@
+{
+  "name": "12_employee_tracker",
+  "version": "1.0.0",
+  "description": "Project Page: [Project Page](https://timothymichaelcook.github.io/4-code-quiz-cook) Project Repo: [Github-repo](https://github.com/timothymichaelcook/4-code-quiz-cook)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothymichaelcook/12_Employee_Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timothymichaelcook/12_Employee_Tracker/issues"
+  },
+  "homepage": "https://github.com/timothymichaelcook/12_Employee_Tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.2.0",
+    "console.table": "^0.10.0"
+  }
+}
