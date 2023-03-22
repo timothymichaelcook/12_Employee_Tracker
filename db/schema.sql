@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS employees_DB;
 -- Creates database named employees_DB
 CREATE DATABASE employees_DB;
 
--- Uses database named employees_DB
+-- Switches to database named employees_DB
 USE employees_DB;
 
 -- Creates table named department
@@ -28,7 +28,7 @@ CREATE TABLE employee (
   first_name VARCHAR(30) NULL,
   last_name VARCHAR(30) NULL,
   role_id INT NOT NULL,
-  manager_id INT NOT NULL,
+  manager_id INT,
   PRIMARY KEY (id)
 );
 
