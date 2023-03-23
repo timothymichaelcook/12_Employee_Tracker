@@ -18,7 +18,7 @@ db.connect(function (err) {
   init();
 });
 
-// Function to initialize the application
+// Function to initialize the application*
 function init() {
   inquirer.prompt({
     type: 'list',
@@ -108,8 +108,8 @@ function addEmployee() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
     if (err) throw err;
-    let allRoles = ['none'];
-    for (let i=0; i < result.length; i++) {
+    let allRoles = ['none',];
+    for (let i = 0; i < result.length; i++) {
       let eachRole = result[i].title;
       allRoles.push(eachRole);
     }
@@ -118,7 +118,7 @@ function addEmployee() {
       if (err) throw err;
       let allEmployees = ['none',];
       for (let i = 0; i < result1.length; i++) {
-        let eachEmployee = result1[i].first_name + result1[2].last_name;
+        let eachEmployee = result1[i].first_name + result1[i].last_name;
         allEmployees.push(eachEmployee);
       }
       inquirer.prompt([
