@@ -18,7 +18,7 @@ db.connect(function (err) {
   init();
 });
 
-// Function to initialize application
+// Function to initialize the application
 function init() {
   inquirer.prompt({
     type: 'list',
@@ -240,7 +240,7 @@ function viewDepartments() {
 }
 
 // Function to view roles
-function viewAllRoles() {
+function viewRoles() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
     if (err) throw err;
@@ -252,13 +252,13 @@ function viewAllRoles() {
 // Function to view employees
 function viewAllEmployees() {
   let query = `
-  SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name
-  AS department, role.salary, CONCAT(manager.first_name,' ',manager.last_name)
+  SELECT e.id, e.first_name, e.last_name, r.title, d.name
+  AS department, r.salary, CONCAT(m.first_name,' ',m.last_name)
   AS manager
-  FROM employee
-  LEFT JOIN role ON employee_id = role.id
-  LEFT JOIN department ON role.department_id = department.id
-  LEFT JOIN employee ON employee.manager_id = manager.id
+  FROM employee e
+  LEFT JOIN role r ON e.role_id = r.id
+  LEFT JOIN department d ON r.department_id = d.id
+  LEFT JOIN employee m ON e.manager_id = m.id
   `
   db.query(query, function (err, result) {
     if (err) throw err;
