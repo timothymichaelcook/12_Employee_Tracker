@@ -284,7 +284,7 @@ function updateEmployeeRole() {
       allRoles.push(eachRole);
     }
     let query = 'SELECT * FROM employee';
-    Connection.query(query, function (err, result1) {
+    db.query(query, function (err, result1) {
       if (err) throw err;
       let allEmployees = [{name: 'Empty', value: -1},];
       for (let i = 0; i < result.length; i++) {
@@ -314,11 +314,15 @@ function updateEmployeeRole() {
         }
         let query = db.query(
           'UPDATE employee SET role_id = ? WHERE id = ?',
-          []
-        )
-      })
+          [role_id, answer.addEmployee],
+          function (err, res) {
+            if (err) throw err,
+            console.log(`Employee's role has been updated.`);
+            init();
+          }
+        );
+      });
     })
   })
-
 }
 
