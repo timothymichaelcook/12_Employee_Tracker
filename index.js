@@ -49,8 +49,8 @@ function init() {
       case 'Add employee':
         addEmployee();
         break;
-      case 'Add roles':
-        addRoles();
+      case 'Add role':
+        addRole();
         break;
       case 'Add department':
         addDepartment();
@@ -108,7 +108,7 @@ function addEmployee() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
     if (err) throw err;
-    let allRoles = ['none',];
+    let allRoles = [];
     for (let i = 0; i < result.length; i++) {
       let eachRole = result[i].title;
       allRoles.push(eachRole);
@@ -118,7 +118,8 @@ function addEmployee() {
       if (err) throw err;
       let allEmployees = ['none',];
       for (let i = 0; i < result1.length; i++) {
-        let eachEmployee = result1[i].first_name + result1[i].last_name;
+        //let eachEmployee = result1[i].first_name + " " + result1[i].last_name;
+        let eachEmployee = `${result1[i].first_name} ${result1[i].last_name}`;
         allEmployees.push(eachEmployee);
       }
       inquirer.prompt([
@@ -197,17 +198,44 @@ function addRole() {
   let query = 'SELECT * FROM department';
   db.query(query, function (err, result) {
     if (err) throw err;
-    let allDepartments = [];
+    let allDepartments = result.map(currentDepartment => currentDepartment.name);
+    /*
+    let allRoles = [];
     for (let i = 0; i < result.length; i++) {
-      let eachDepartment = result[i].name;
-      allDepartments.push(eachDepartment);
+      let currentRole = result[i].title;
+      allRoles.push(currentRole);
+    }
+    */
+   /*
+    let allRoles = [];
+    for (let i = 0; i < result.length; i++) {
+      allRoles.push(result[i].title);
+    }
+    */
+    /*
+    roles = [
+      {title: 'Sales Lead', salary: 100000, department_id: 1},
+      {title: 'Salesperson', salary: 80000, department_id: 1},
+      {title: 'Lead Engineer', salary: 150000, department_id: 2},
+    ]
+
+    function extractTitle(role) {
+      return role.title;
     }
 
+    allTitles = roles.map(extractTitle);
+    Results in: ['Sales Lead', 'Salesperson', 'Lead Engineer']
+    */
+
+
+
+
+    
     inquirer.prompt([
       {
         name: 'title',
         type: 'input',
-        message: 'Please choose a role:',
+        message: 'Please enter a new title:',
         validate: input => {
           if (input.trim() != '') {
             return true;
