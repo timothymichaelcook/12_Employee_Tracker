@@ -18,8 +18,7 @@ db.connect(function (err) {
   init();
 });
 
-// Function to start application
-
+// Function to initialize application
 function init() {
   inquirer.prompt({
     type: 'list',
@@ -72,7 +71,7 @@ function init() {
   });
 }
 
-// Function to add department
+// Function to add department*
 function addDepartment() {
   inquirer.prompt({
     name: 'addDepartment',
@@ -100,7 +99,7 @@ function addDepartment() {
   });
 }
 
-// Function to add roles
+// Function to add roles*
 function addRole() {
   let query = 'SELECT * FROM department';
   db.query(query, function (err, result) {
@@ -165,7 +164,7 @@ function addRole() {
   })
 }
 
-// Function to add employees
+// Function to add employee*
 function addEmployee() {
   // Declare query variable locally in addEmployee
   // Set up db connection
@@ -174,7 +173,7 @@ function addEmployee() {
   // call init function again
 }
 
-// Function to view departments
+// Function to view departments*
 function viewDepartments() {
   let query = 'SELECT * FROM department';
   db.query(query, function (err, result) {
@@ -184,8 +183,8 @@ function viewDepartments() {
   })
 }
 
-// Function to view roles
-function viewRoles() {
+// Function to view roles*
+function viewAllRoles() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
     if (err) throw err;
@@ -194,14 +193,14 @@ function viewRoles() {
   })
 }
 
-// Function to view employees
-function viewEmployees() {
+// Function to view employees*
+function viewAllEmployees() {
   let query = `
   SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name
   AS department, role.salary, CONCAT(manager.first_name,' ',manager.last_name)
   AS manager
   FROM employee
-  LEFT JOIN role r ON employee_id = role.id
+  LEFT JOIN role ON employee_id = role.id
   LEFT JOIN department ON role.department_id = department.id
   LEFT JOIN employee ON employee.manager_id = manager.id
   `
@@ -212,20 +211,6 @@ function viewEmployees() {
   })
 }
 
-// Function to view employee's based on manager id
-function viewEmployeesByManager()
+// Function to update employee roles*
+function updateEmployeeRole()
 
-// Function to update employee roles
-function updateEmployeeRoles()
-
-// Function to update employee's manager
-function updateEmployeeManager()
-
-// Function to delete departments
-function deleteDepartments()
-
-// Function to delete roles
-function deleteRoles()
-
-// Function to delete employees
-function deleteEmployees()
