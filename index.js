@@ -50,7 +50,7 @@ function init() {
         addEmployee();
         break;
       case 'Add roles':
-        addRole();
+        addRoles();
         break;
       case 'Add department':
         addDepartment();
@@ -130,7 +130,7 @@ function addEmployee() {
             if (input.trim() != '') {
               return true;
             }
-            return '(Cannot be blank) Please enter employee\'s first name:'
+            return '(Cannot be blank) Please enter first name of employee:'
           }
         },
         {
@@ -141,32 +141,32 @@ function addEmployee() {
             if (input.trim() != '') {
               return true;
             }
-            return '(Cannot be blank) Please enter employee\'s last name:'
+            return '(Cannot be blank) Please enter last name of employee:'
           }
         },
         {
           name: 'role_id',
           type: 'list',
-          message: 'Please enter employee\'s role: ',
+          message: 'Please enter role of employee: ',
           choices: [...allRoles] 
         },
         {
           name: 'manager_id',
           type: 'list',
-          message: 'Please enter employee\'s manager: ',
+          message: 'Please enter manager of employee: ',
           choices: [...allEmployees]
         }
       ])
       .then(function (answer) {
         console.log(answer);
 
-        let role_id = '';
+        let role_id = 1;
         for (i = 0; i < result.length; i++) {
           if (answer.role_id === result[i].title) {
             role_id = result[i].id;
           }
         }
-        let manager_id  = '';
+        let manager_id  = null;
         for (i = 0; i < result1.length; i++) {
           if (answer.manager_id === result1[i].first_name + result1[i].last_name) {
             manager_id = result1[i].id;
@@ -199,8 +199,8 @@ function addRole() {
     if (err) throw err;
     let allDepartments = [];
     for (let i = 0; i < result.length; i++) {
-      let individualDepartment = result[i].name;
-      allDepartments.push(individualDepartment);
+      let eachDepartment = result[i].name;
+      allDepartments.push(eachDepartment);
     }
 
     inquirer.prompt([
@@ -212,30 +212,30 @@ function addRole() {
           if (input.trim() != '') {
             return true;
           }
-          return '(Cannot be blank) Please choose a role: '
+          return '(Cannot be blank) Please choose a role:'
         }
       },
       {
         name: 'salary',
         type: 'input',
-        message: 'Please choose a salary:',
+        message: 'Please enter salary:',
         validate: input => {
           if (!isNaN(input)) {
             return true;
           }
-          return '(Cannot be blank or contain letters/special characters) Please choose a salary you would like to add: '
+          return '(Cannot be blank or contain letters/special characters) Please enter a salary: '
         }
       },
       {
         name: 'department_id',
         type: 'list',
-        message: 'Please choose a role for the new department: ',
+        message: 'Please choose a department for the new role: ',
         choices: [...allDepartments]
       }
     ])
     .then(function (answer) {
       let department_id = '';
-      for (i = 0; i < answer.length; i++) {
+      for (i = 0; i < result.length; i++) {
         if (answer.department_id === result[i].name) {
           department_id = result[i].id;
         }
@@ -248,7 +248,7 @@ function addRole() {
         },
         function (err, res) {
           if (err) throw err;
-          console.log(`${answer.title} in ${answer.department_id} department for $ ${answer.salary} has been created.\n`);
+          console.log(`${answer.title} in ${answer.department_id} department for $ ${answer.salary} has been created.`);
           init();
         }
       );
@@ -289,7 +289,7 @@ function updateEmployeeRole() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
     if (err) throw err;
-    let allRoles = ['none'];
+    let allRoles = ['none',];
     for (let i = 0; i < result.length; i++) {
       let eachRole = result[i].title;
       allRoles.push(eachRole);
