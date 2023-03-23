@@ -12,6 +12,8 @@ const db = mysql.createConnection(
   },
 );
 
+//testing commit
+
 db.connect(function (err) {
   if (err) throw err;
   console.log(`Connected to the employees_DB database.`);
