@@ -8,12 +8,12 @@ Project Repo: [Github-repo](https://github.com/timothymichaelcook/4-code-quiz-co
 
 The focus of this project was to create an application that displayed a timed quiz, with multiple choice and T/F questions are displayed as either correct or incorrect as soon as the click event occurred on the button. The quiz will generate as many questions as possible within the time frame as repetition is important when learning. Users can save their information in a high scores table that will populate every time a score is saved. This table also has the ability to be cleared.
 
-## User Story REDO
+## User Story
 
 ```
-- AS A teacher
-- I WANT to have quiz on computer programming fundamentals
-- SO THAT my students are knowledgeable about computer programming
+- AS A business owner
+- I WANT to be able to view and manage the departments, roles, and employees in my company
+- SO THAT I can organize and plan my business
 ```
 
 ## Installation REDO
