@@ -166,14 +166,76 @@ function addRole() {
 
 // Function to add employee*
 function addEmployee() {
-  // Declare query variable locally in addEmployee
-  // Set up db connection
-  // NPM Inquirer to get user inputs via prompts
-  // .then method
-  // call init function again
+  let query = 'SELECT * FROM role';
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    let allRoles = ['Empty']
+    for (let i=0; i < result.length; i++) {
+      let eachRole = result[i].title;
+      allRoles.push(eachRole);
+    }
+    let query = 'SELECT * FROM employee';
+    db.query(query, function (err, result1) {
+      if (err) throw err;
+      let allEmployees = ['none',];
+      for (let i=0; i < result1.length; i++) {
+        let eachEmployee = result1[i].first_name + result[2].last_name;
+        allEmployees.push(eachEmployee);
+      }
+      inquirer.prompt([
+        {
+          name: 'first_name',
+          type: 'input',
+          message: 'Please enter employee\s first name: ',
+          validate: input => {
+            if (input.trim() != '') {
+              return true;
+            }
+            return '(Cannot be blank) Please enter employee\s first name: '
+          }
+        },
+        {
+          name: 'role_id',
+          type: 'list',
+          message: 'Please enter employee\s role: ',
+          choices: [...allRoles] 
+        },
+        {
+          name: 'manager_id',
+          type: 'list',
+          message: 'Please enter employee\s manager: ',
+          choices: [...allEmployees]
+        }
+      ])
+      .then(function (answer) {
+        console.log(answer);
+
+        let role_id = '';
+        for (i = 0; i < result.length; i++) {
+          if (answer.role_id === result[i].title) {
+            role_id = result[i].id;
+          }
+        }
+        let query = db.query(
+          'INSERT INTO employee SET ?',
+          {
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            role_id: role_id,
+            manager_id: manager_id 
+          },
+          function (err, res) {
+            if (err) throw err;
+            console.log(`Employee ${answer.first_name} ${answer.last_name} has been created.`);
+            init();
+          }
+        );
+      });
+    })
+  })
 }
 
-// Function to view departments*
+// Function to view departments
 function viewDepartments() {
   let query = 'SELECT * FROM department';
   db.query(query, function (err, result) {
@@ -183,7 +245,7 @@ function viewDepartments() {
   })
 }
 
-// Function to view roles*
+// Function to view roles
 function viewAllRoles() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
@@ -193,7 +255,7 @@ function viewAllRoles() {
   })
 }
 
-// Function to view employees*
+// Function to view employees
 function viewAllEmployees() {
   let query = `
   SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name
@@ -212,5 +274,51 @@ function viewAllEmployees() {
 }
 
 // Function to update employee roles*
-function updateEmployeeRole()
+function updateEmployeeRole() {
+  let query = 'SELECT * FROM role';
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    let allRoles = ['Empty'];
+    for (let i = 0; i < result.length; i++) {
+      let eachRole = result[i].title;
+      allRoles.push(eachRole);
+    }
+    let query = 'SELECT * FROM employee';
+    Connection.query(query, function (err, result1) {
+      if (err) throw err;
+      let allEmployees = [{name: 'Empty', value: -1},];
+      for (let i = 0; i < result.length; i++) {
+        let eachEmployee = result1[i].first_name + ' ' + result1[i].last_name;
+        allEmployees.push({name: eachEmployee, value: result1[i].id});
+      }
+      inquirer.prompt([
+        {
+          name: 'employee',
+          type: 'list',
+          message: 'Please choose an employee that you would like to update his or her role: ',
+          choices: [...allEmployees]
+        },
+        {
+          name: 'role',
+          type: 'list',
+          message: 'Please choose a new role: ',
+          choices: [...allRoles]
+        },
+      ])
+      .then(function (answer) {
+        let role_id = '';
+        for (i = 0; i < result.length; i++) {
+          if (answer.role === result[i].title) {
+            role_id = result[i].id;
+          }
+        }
+        let query = db.query(
+          'UPDATE employee SET role_id = ? WHERE id = ?',
+          []
+        )
+      })
+    })
+  })
+
+}
 
