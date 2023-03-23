@@ -200,7 +200,7 @@ function addEmployee() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
     if (err) throw err;
-    let allRoles = ['Empty']
+    let allRoles = ['none'];
     for (let i=0; i < result.length; i++) {
       let eachRole = result[i].title;
       allRoles.push(eachRole);
@@ -209,32 +209,43 @@ function addEmployee() {
     db.query(query, function (err, result1) {
       if (err) throw err;
       let allEmployees = ['none',];
-      for (let i=0; i < result1.length; i++) {
-        let eachEmployee = result1[i].first_name + result[2].last_name;
+      for (let i = 0; i < result1.length; i++) {
+        let eachEmployee = result1[i].first_name + result1[2].last_name;
         allEmployees.push(eachEmployee);
       }
       inquirer.prompt([
         {
           name: 'first_name',
           type: 'input',
-          message: 'Please enter employee\s first name: ',
+          message: 'Please enter first name of employee:',
           validate: input => {
             if (input.trim() != '') {
               return true;
             }
-            return '(Cannot be blank) Please enter employee\s first name: '
+            return '(Cannot be blank) Please enter employee\'s first name:'
+          }
+        },
+        {
+          name: 'last_name',
+          type: 'input',
+          message: 'Please enter last name of employee:',
+          validate: input => {
+            if (input.trim() != '') {
+              return true;
+            }
+            return '(Cannot be blank) Please enter employee\'s last name:'
           }
         },
         {
           name: 'role_id',
           type: 'list',
-          message: 'Please enter employee\s role: ',
+          message: 'Please enter employee\'s role: ',
           choices: [...allRoles] 
         },
         {
           name: 'manager_id',
           type: 'list',
-          message: 'Please enter employee\s manager: ',
+          message: 'Please enter employee\'s manager: ',
           choices: [...allEmployees]
         }
       ])
@@ -245,6 +256,14 @@ function addEmployee() {
         for (i = 0; i < result.length; i++) {
           if (answer.role_id === result[i].title) {
             role_id = result[i].id;
+          }
+        }
+        let manager_id  = '';
+        for (i = 0; i < result1.length; i++) {
+          if (answer.manager_id === result1[i].first_name + result1[i].last_name) {
+            manager_id = result1[i].id;
+          } else if (answer.manager_id === 'none') {
+            manager_id = null;
           }
         }
         let query = db.query(
@@ -266,17 +285,12 @@ function addEmployee() {
   })
 }
 
-
-
-
-
-
 // Function to update employee roles*
 function updateEmployeeRole() {
   let query = 'SELECT * FROM role';
   db.query(query, function (err, result) {
     if (err) throw err;
-    let allRoles = ['Empty'];
+    let allRoles = ['none'];
     for (let i = 0; i < result.length; i++) {
       let eachRole = result[i].title;
       allRoles.push(eachRole);
@@ -284,7 +298,7 @@ function updateEmployeeRole() {
     let query = 'SELECT * FROM employee';
     db.query(query, function (err, result1) {
       if (err) throw err;
-      let allEmployees = [{name: 'Empty', value: -1},];
+      let allEmployees = [{name: 'none', value: -1},];
       for (let i = 0; i < result.length; i++) {
         let eachEmployee = result1[i].first_name + ' ' + result1[i].last_name;
         allEmployees.push({name: eachEmployee, value: result1[i].id});
@@ -312,9 +326,9 @@ function updateEmployeeRole() {
         }
         let query = db.query(
           'UPDATE employee SET role_id = ? WHERE id = ?',
-          [role_id, answer.addEmployee],
+          [role_id, answer.employee],
           function (err, res) {
-            if (err) throw err,
+            if (err) throw err;
             console.log(`Employee's role has been updated.`);
             init();
           }

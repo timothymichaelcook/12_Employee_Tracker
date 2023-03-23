@@ -16,8 +16,8 @@ CREATE TABLE department (
 -- Creates table named role
 CREATE TABLE role (
   id INT NOT NULL AUTO_INCREMENT,
-  title VARCHAR(30) NOT NULL,
-  salary DECIMAL NOT NULL,
+  title VARCHAR(30) NULL,
+  salary INT NOT NULL,
   department_id INT NOT NULL,
   PRIMARY KEY (id)
 );
