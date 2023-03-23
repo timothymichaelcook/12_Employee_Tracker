@@ -27,38 +27,43 @@ function init() {
     message: 'What would you like to do?',
     name: 'start',
     choices: [
-      'Add department',
+      'View all employees',
+      'Add employee',
+      'Update employee role',
+      'View all roles',
       'Add roles',
-      'Add employees',
-      'View departments',
-      'View roles',
-      'View employees',
-      'Update employee roles',
-      'Update employee\'s manager',
-      'View employee\s by manager',
-      'Delete departments',
-      'Delete roles',
-      'Delete employees',
-      'Exit',
+      'View all departments',
+      'Add department',
+      'Quit',
     ],
   })
   .then((choice) => {
     switch (choice.start) {
-      case 'Add departments':
-        addDepartment();
+      case 'View all employees':
+        viewAllEmployees();
+        break;
+      case 'Add employee':
+        addEmployee();
+        break;
+      case 'Update employee role':
+        updateEmployeeRole();
+        break;
+      case 'View all roles':
+        viewRoles();
         break;
       case 'Add roles':
         addRole();
         break;
-      case 'Add employees':
-        addEmployee();
-        break;
-      case 'View departments':
+      case 'View all departments':
         viewDepartments();
+        break; 
+      case 'Add department':
+        addDepartment();
         break;
-      case 'View roles':
-        viewRoles();
-        break;
+      
+      
+      
+      
       //add additional cases with functions
       //
       //
@@ -66,7 +71,7 @@ function init() {
       //
       //
       //
-      case 'Exit':
+      case 'Quit':
         db.end();
         break;
     }
@@ -143,26 +148,26 @@ function addRole() {
         choices: [...totalDepartments]
       }
     ])
-    .then(function (userSelection) {
+    .then(function (answer) {
       let department_id = '';
-      for (i = 0; i < userSelection.length; i++) {
-        if (userSelection.department_id === result[i].name) {
+      for (i = 0; i < answer.length; i++) {
+        if (answer.department_id === result[i].name) {
           department_id = result[i].id;
         }
       }
-      let query = db.query('INSERT INTO role SET ?'
+      let query = db.query('INSERT INTO role SET ?',
         {
-          title: userSelection.title,
-          salary: userSelection.salary,
+          title: answer.title,
+          salary: answer.salary,
           department_id: department_id,
         },
         function (err, res) {
           if (err) throw err;
-          console.log(`${userSelection.title} in ${userSelection.department_id} department for $${userSelection} has been created.`);
+          console.log(`${answer.title} in ${answer.department_id} department for $${answer} has been created.`);
           init();
         }
-      )
-    })
+      );
+    });
   })
 }
 
