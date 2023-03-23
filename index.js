@@ -8,8 +8,8 @@ const db = mysql.createConnection(
     host: 'localhost',
     user: 'root',
     password: '%Kdd0YuK2sztEJL8',
-    database: 'employees_DB'
-  },
+    database: 'employees_DB',
+  }
 );
 
 //testing commit
@@ -60,17 +60,6 @@ function init() {
       case 'Add department':
         addDepartment();
         break;
-      
-      
-      
-      
-      //add additional cases with functions
-      //
-      //
-      //
-      //
-      //
-      //
       case 'Quit':
         db.end();
         break;
@@ -91,15 +80,15 @@ function addDepartment() {
       return '(Cannot be blank) Please choose a department: '
     }
   })
-  .then(function (userSelection) {
+  .then(function (answer) {
     let query = db.query(
       'INSET INTO department SET ?',
       {
-        name: userSelection.addDepartment,
+        name: answer.addDepartment,
       },
       function (err, res) {
         if (err) throw err;
-        console.log('Department: ' + userSelection.addDepartment + ' has been created ');
+        console.log('Department: ' + answer.addDepartment + ' has been created ');
         init();
       }
     );
