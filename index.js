@@ -12,11 +12,9 @@ const db = mysql.createConnection(
   }
 );
 
-//testing commit
-
 db.connect(function (err) {
   if (err) throw err;
-  console.log(`Connected to the employees_DB database.`);
+  console.log(`Connected to employees_DB database.`);
   init();
 });
 
@@ -37,8 +35,8 @@ function init() {
       'Quit',
     ],
   })
-  .then((choice) => {
-    switch (choice.start) {
+  .then((answers) => {
+    switch (answers.start) {
       case 'View all employees':
         viewAllEmployees();
         break;
@@ -82,7 +80,7 @@ function addDepartment() {
   })
   .then(function (answer) {
     let query = db.query(
-      'INSET INTO department SET ?',
+      'INSERT INTO department SET ?',
       {
         name: answer.addDepartment,
       },
