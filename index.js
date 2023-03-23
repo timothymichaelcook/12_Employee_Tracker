@@ -22,7 +22,7 @@ db.connect(function (err) {
 function init() {
   inquirer.prompt({
     type: 'list',
-    message: 'What would you like to do?',
+    message: 'Please choose: ',
     name: 'start',
     choices: [
       'View all employees',
@@ -65,6 +65,44 @@ function init() {
   });
 }
 
+// Function to view departments
+function viewDepartments() {
+  let query = 'SELECT * FROM department';
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    init();
+  })
+}
+
+// Function to view roles
+function viewRoles() {
+  let query = 'SELECT * FROM role';
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    init();
+  })
+}
+
+// Function to view employees
+function viewAllEmployees() {
+  let query = `
+  SELECT e.id, e.first_name, e.last_name, r.title, d.name
+  AS department, r.salary, CONCAT(m.first_name,' ',m.last_name)
+  AS manager
+  FROM employee e
+  LEFT JOIN role r ON e.role_id = r.id
+  LEFT JOIN department d ON r.department_id = d.id
+  LEFT JOIN employee m ON e.manager_id = m.id
+  `
+  db.query(query, function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    init();
+  })
+}
+
 // Function to add department*
 function addDepartment() {
   inquirer.prompt({
@@ -98,41 +136,40 @@ function addRole() {
   let query = 'SELECT * FROM department';
   db.query(query, function (err, result) {
     if (err) throw err;
-    let totalDepartments = [];
+    let allDepartments = [];
     for (let i = 0; i < result.length; i++) {
       let individualDepartment = result[i].name;
-      totalDepartments.push(individualDepartment);
+      allDepartments.push(individualDepartment);
     }
 
     inquirer.prompt([
       {
         name: 'title',
         type: 'input',
-        message: 'Please choose a role: ',
+        message: 'Please choose a role:',
         validate: input => {
           if (input.trim() != '') {
             return true;
           }
           return '(Cannot be blank) Please choose a role: '
         }
-
       },
       {
         name: 'salary',
         type: 'input',
-        message: 'Please choose a salary: ',
+        message: 'Please choose a salary:',
         validate: input => {
           if (!isNaN(input)) {
             return true;
           }
-          return '(Cannot be blank or contain letters) Please choose a salary you would like to add: '
+          return '(Cannot be blank or contain letters/special characters) Please choose a salary you would like to add: '
         }
       },
       {
         name: 'department_id',
         type: 'list',
         message: 'Please choose a role for the new department: ',
-        choices: [...totalDepartments]
+        choices: [...allDepartments]
       }
     ])
     .then(function (answer) {
@@ -150,7 +187,7 @@ function addRole() {
         },
         function (err, res) {
           if (err) throw err;
-          console.log(`${answer.title} in ${answer.department_id} department for $${answer} has been created.`);
+          console.log(`${answer.title} in ${answer.department_id} department for $ ${answer.salary} has been created.\n`);
           init();
         }
       );
@@ -229,43 +266,10 @@ function addEmployee() {
   })
 }
 
-// Function to view departments
-function viewDepartments() {
-  let query = 'SELECT * FROM department';
-  db.query(query, function (err, result) {
-    if (err) throw err;
-    console.table(result);
-    init();
-  })
-}
 
-// Function to view roles
-function viewRoles() {
-  let query = 'SELECT * FROM role';
-  db.query(query, function (err, result) {
-    if (err) throw err;
-    console.table(result);
-    init();
-  })
-}
 
-// Function to view employees
-function viewAllEmployees() {
-  let query = `
-  SELECT e.id, e.first_name, e.last_name, r.title, d.name
-  AS department, r.salary, CONCAT(m.first_name,' ',m.last_name)
-  AS manager
-  FROM employee e
-  LEFT JOIN role r ON e.role_id = r.id
-  LEFT JOIN department d ON r.department_id = d.id
-  LEFT JOIN employee m ON e.manager_id = m.id
-  `
-  db.query(query, function (err, result) {
-    if (err) throw err;
-    console.table(result);
-    init();
-  })
-}
+
+
 
 // Function to update employee roles*
 function updateEmployeeRole() {
